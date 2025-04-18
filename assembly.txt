@@ -1,0 +1,167 @@
+ORG 100
+
+LOOPA, SKI   /loop for first number
+BUN LOOPA    /back to loop if no input
+            /BUN is skipped if input flag is triggered
+CLA         /Clear AC
+INP         /get input
+STA NUM     /store input into NUM
+LDA NUM     /load num before operations
+ADD CON     /convert to decimal
+STA NUM     /store converted value
+
+
+LOOPB, SKI  /loops again for second digit
+BUN LOOPB   / mostly the same stuff
+CLA
+INP
+ADD CON     /convert first
+ADD NUM     /then add other digit
+ADD REC     /convert back to ASCII
+OUT         /output num in ASCII
+HLT         /halt program
+
+NUM,  DEC 0
+CON, DEC -48 /covnert ASCII to decimal
+REC, DEC 48  /convertt decimal to ASCII
+    END
+
+///// ANOTHER PROGRAM ///////
+
+//FST, SKI		//LOOK FOR INPUT
+	BUN FST	//NO INPUT
+	CLA		//CLEAR AC
+	INP		//INPUT TO AC
+	ADD ECH
+	OUT		//OUTPUT CHAR
+	HLT		//QUIT
+ECH, DEC 2		//STORES DEMICAL NUMBER 2
+	END		//ENDS PROGRAM
+
+//
+
+FST, SKI		//SEARCHES FOR INPUT
+	BUN FST	//LOOPS IF EMPTY
+	CLA		//CLEARS AC
+	INP		//INPUT TO AC
+	STA MSD	//STORES FIRST DIGIT IN MSD
+SND, SKI
+	BUN SND
+	CLA
+	INP
+	STA LSD	//STORES SECOND DIGIT IN LSD
+	LDA MSD
+	OUT
+	CLA
+
+
+MSD, DEC 0
+LSD, DEC 0
+	END		//ENDS PROGRAM
+
+//
+ORG 100 //ORIGIN OF PROGRAM IS AT 100
+//tHIS PROGRAM IMPLEMENTS 83 + 23
+LDA SUB //LOADS SUB INTO AC
+CMA	//COMPLEMENTS VALUE IN AC
+INC	//INCREMENT AC
+ADD MIN	//ADD MINUEND TO AC
+STA DIF 	//STORES VALUE IN AC TO DIF
+LDA DIF	//LOADS VALUE IN DIF TO AC
+OUT		//OUTPUTS AC
+HLT		//HALT PROGRAM
+MIN,	DEC 83
+SUB,	DEC -23
+DIF,	HEX 0
+END
+
+//ACTUAL PROJECT STARTS HERE
+
+//first get both input digits, signify which one is tens & ones - DONE
+
+//convert both digits into their decimal equivalent by subtracting 48 - DONE
+
+//Create a total varaible, add the tens place 10 times & the ones only once - DONE
+
+//From there, make a for loop which takes a sum variable & adds increasing odd numbers up to the value of the number - DONE!!!!
+	/Now that we have the total, we can add all the odd numbers to a sum value - DONE
+	/We can accomplish this by - DOESN'T MATTER ITS DONE
+
+//Take sum variable & convert it to octal form, need to figure out how to store all 4 variables
+
+	ORG 100
+FST,   SKI   /loop for first number
+	BUN FST    /back to loop if no input
+            /BUN is skipped if input flag is triggered
+	CLA         /CLEAR AC
+	INP         /GET INPUT
+	STA MSD     /STORE TENS DIGIT IN NUM
+SND,	SKI	     /Loop for 2nd number
+	BUN SND
+	CLA
+	INP
+	STA LSD	/STORE 2ND DIGIT
+//HERE WE CONVERT EACH TO THEIR DECIMAL FORM
+	CLA
+	LDA MSD
+	ADD TO_DEC /CONVERT TENS DIGIT
+	STA MSD /STORE CONVERTED DIGIT
+	CLA
+	LDA LSD
+	ADD TO_DEC /CONVERT ONES DIGIT
+	STA LSD /STORE CONVERTED DIGIT
+	CLA
+//STORE THE COMPLETE NUMBER IN DEC_IN VARIABLE
+	LDA DEC_IN
+/ADD MSD 10 TIMES TO SIMULATE TENS PLACE
+	ADD MSD /1
+	ADD MSD /2
+	ADD MSD /3
+	ADD MSD /4
+	ADD MSD /5 - HALFWAY THERE!
+	ADD MSD /6
+	ADD MSD /7
+	ADD MSD /8
+	ADD MSD /9
+	ADD MSD /WHAT COMES AFTER 9?
+/ALSO ADD LSD, WHICH COMES OUT TO FINAL NUM
+	ADD LSD
+	STA DEC_IN
+/AT THIS POINT WE HAVE OUR DECIMAL NUMBER AND WE CAN START THE LOOPING TO ADD ODD NUMBERS
+
+/I THINK WHAT WOULD BE BEST HERE IS TO CHECK IF DEC_IN IS NEGATIVE, IF NOT CONTINUE WITH THE LOOP & DO THE FOLLOWING
+	/INCREMENT ODD_ADDER TWICE, ADD IT TO SUM_TOTAL VARIABLE, THEN ADD -2 TO THE DEC_IN VALUE
+
+/LOOP STARTS HERE
+LOP,	LDA SUM_TOTAL /START OF LOOP - LOAD SUM TOTAL & START TO ADD 
+	ADD ODD_ADDER /ADD THE NEXT ODD NUMBER
+	STA SUM_TOTAL /STORE THE TOTAL
+	CLA
+
+	LDA ODD_ADDER /LOAD THE TEMP ADDER VARIABLE
+	ADD 2		  /OBTAIN THE NEXT ODD NUMBER
+	STA ODD_ADDER
+	CLA
+
+	LDA DEC_IN	/DECREMENT THE INPUT BY 2 & STORE IT AGAIN
+	ADD -2
+	STA DEC_IN
+
+	SNA DEC_IN //DOES NOT LOOP AGAIN IF DEC_IN IS NEGATIVE
+	BUN LOP	//RETURNS TO START OF THE LOOP IF DEC_IN IS STILL POSITIVE
+
+/ASSUMING THIS WORKS, WE SHOULD NOW HAVE THE DECIMAL TOTAL OF ALL ODD NUMBERS, NOW TO CONVERT IT
+
+
+/
+	HLT
+MSD,	DEC 0		/TENS PLACE INPUT CHAR
+LSD,	DEC 0		/ONES PLACE INPUT CHAR
+TOTAL,	DEC 0
+TO_DEC,	DEC -48	/CONVERTING ASCII TO DECIMAL
+TO_ASCII,    DEC 48	/CONVERTING DECIMAL TO ASCII
+DEC_IN,	DEC 0		/DECIMAL INPUT
+ODD_ADDER	DEC 1	/VARIABLE WE'LL USE TO ADD ODD NUMBERS
+SUM_TOTAL	DEC 0	/WE WILL BE ADDING ALL ODD NUMEBRS TO THIS VALUE
+	END
+
